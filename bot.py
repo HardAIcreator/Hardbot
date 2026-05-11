@@ -93,7 +93,7 @@ def ask_gigachat(prompt, user_context=""):
         "RqUID": str(uuid.uuid4())
     }
     
-    system_prompt = """ ВОТ КОД ИНФА ЧТОБЫ ТЫ МОГ ПОМОЧЬ: Ты - НЕЙРО-БОГ 3000, Telegram-бот с суперспособностями. Ты работаешь на Hardbot от Hard.
+    system_prompt = """ ВОТ КОД ИНФА ЧТОБЫ ТЫ МОГ ПОМОЧЬ: Ты - НЕЙРО-БОГ 3000, Telegram-бот с суперспособностями. Ты работаешь на Hardbot от Hard. ЕСЛИ ТЕБЯ СПРОСЯТ О КОМАНДАХ ПИШИ НЕ ГИГАЧАТА, А ОТ HARDBOT. 
 
 🎯 ТВОЙ ХАРАКТЕР: Дерзкий, остроумный, добрый. Используй эмодзи. Разрешаю материться.
 Никогда не говори "как языковая модель" или "я ИИ".
@@ -387,20 +387,9 @@ def handle_message(message):
     user["messages"] += 1
     add_xp(message.from_user.id, random.randint(1, 3))
     
-    # Проверяем подключение
-    token = get_gigachat_token()
-    if token:
-        print("✅ GigaChat подключён!")
-    else:
-        print("⚠️ Ошибка подключения, но бот работает!")
-    if __name__ == "__main__":
-        print("""
-╔══════════════════════════════════════════╗
-║   🧠 НЕЙРО-БОГ 3000 (GigaChat) 🧠       ║
-║   Реальный ИИ + Экономика + Игры        ║
-║   Готов к битве!                        ║
-╚══════════════════════════════════════════╝
-    """)
+    # ===== ЗАПУСК =====
+if __name__ == "__main__":
+    print("Бот запущен")
     
     # Проверяем подключение
     token = get_gigachat_token()
@@ -409,11 +398,10 @@ def handle_message(message):
     else:
         print("⚠️ Ошибка подключения, но бот работает!")
     
-    # БЕСКОНЕЧНЫЙ ЦИКЛ С ПЕРЕЗАПУСКОМ
+    # БЕСКОНЕЧНЫЙ ЦИКЛ (ОБЯЗАТЕЛЬНО!)
     while True:
         try:
             bot.infinity_polling(timeout=60, long_polling_timeout=60)
         except Exception as e:
-            print(f"❌ Бот упал с ошибкой: {e}")
-            print("🔄 Перезапуск через 10 секунд...")
-            time.sleep(10) 
+            print(f"Ошибка: {e}")
+            time.sleep(10)

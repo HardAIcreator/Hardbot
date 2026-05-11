@@ -352,16 +352,6 @@ def handle_message(message):
     user = get_user(message.from_user.id, message.from_user.first_name)
     user["messages"] += 1
     add_xp(message.from_user.id, random.randint(1, 3))
-
-# ===== ЗАПУСК =====
-if __name__ == "__main__":
-    print("""
-╔══════════════════════════════════════════╗
-║   🧠 НЕЙРО-БОГ 3000 (GigaChat) 🧠       ║
-║   Реальный ИИ + Экономика + Игры        ║
-║   Готов к битве!                        ║
-╚══════════════════════════════════════════╝
-    """)
     
     # Проверяем подключение
     token = get_gigachat_token()

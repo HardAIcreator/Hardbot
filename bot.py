@@ -10,6 +10,13 @@ from collections import defaultdict
 # ОТКЛЮЧАЕМ ПРЕДУПРЕЖДЕНИЯ О SSL (НЕ ВЛИЯЕТ НА БЕЗОПАСНОСТЬ)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+try:
+    from keep_alive import keep_alive
+    keep_alive()
+    print("✅ Keep-alive сервер запущен")
+except:
+    print("⚠️ Keep-alive не загружен")
+    
 # ===== ВСТАВЬ СВОИ ДАННЫЕ =====
 TELEGRAM_TOKEN = "8710199445:AAHQwkKePs1Lff8HjaDnnHolGrubNuQobl0"
 CLIENT_ID = "019e1385-26b6-7a0f-8392-283269ccbba8"

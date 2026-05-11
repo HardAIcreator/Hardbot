@@ -362,5 +362,27 @@ if __name__ == "__main__":
         print("✅ GigaChat подключён!")
     else:
         print("⚠️ Ошибка подключения, но бот работает!")
+        if __name__ == "__main__":
+    print("""
+╔══════════════════════════════════════════╗
+║   🧠 НЕЙРО-БОГ 3000 (GigaChat) 🧠       ║
+║   Реальный ИИ + Экономика + Игры        ║
+║   Готов к битве!                        ║
+╚══════════════════════════════════════════╝
+    """)
     
-    bot.infinity_polling()
+    # Проверяем подключение
+    token = get_gigachat_token()
+    if token:
+        print("✅ GigaChat подключён!")
+    else:
+        print("⚠️ Ошибка подключения, но бот работает!")
+    
+    # БЕСКОНЕЧНЫЙ ЦИКЛ С ПЕРЕЗАПУСКОМ
+    while True:
+        try:
+            bot.infinity_polling(timeout=60, long_polling_timeout=60)
+        except Exception as e:
+            print(f"❌ Бот упал с ошибкой: {e}")
+            print("🔄 Перезапуск через 10 секунд...")
+            time.sleep(10) 

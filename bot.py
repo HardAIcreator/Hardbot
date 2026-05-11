@@ -86,7 +86,7 @@ def ask_gigachat(prompt, user_context=""):
         "RqUID": str(uuid.uuid4())
     }
     
-    system_prompt = """Ты - НЕЙРО-БОГ 3000, крутой Telegram-бот. Отвечай коротко, с юмором, используй эмодзи. Никогда не говори что ты ИИ."""
+    system_prompt = """Ты - НЕЙРО-БОГ 3000, крутой Telegram-бот. Отвечай коротко, с юмором, используй эмодзи. Никогда не говори что ты ИИ. ВОТ КОД ИНФА ЧТОБЫ ТЫ МОГ ПОМОЧЬ:"""
     
     data = {
         "model": "GigaChat",
@@ -147,7 +147,7 @@ def progress_bar(current, total, length=15):
 @bot.message_handler(commands=["start"])
 def cmd_start(message):
     get_user(message.from_user.id, message.from_user.first_name)
-    bot.reply_to(message, f"""
+    bot.send_message(message.chat.id, f"""
 🧠 **НЕЙРО-БОГ 3000** 🧠
 
 Привет, {message.from_user.first_name}!
@@ -171,7 +171,7 @@ def cmd_ask(message):
     question = message.text.replace("/спросить", "").strip()
     
     if not question:
-        bot.reply_to(message, "Что хочешь спросить? Например: /спросить Как стать имбой?")
+        bot.send_message(message.chat.id, "Что хочешь спросить? Например: /спросить Как стать имбой?")
         return
     
     bot.send_chat_action(message.chat.id, 'typing')
@@ -181,7 +181,7 @@ def cmd_ask(message):
     user["ai_queries"] += 1
     add_xp(message.from_user.id, 10)
     
-    bot.reply_to(message, f"🧠 **ИИ:** {answer}\n\n✨ +10 XP")
+    bot.send_message(message.chat.id, f"🧠 **ИИ:** {answer}\n\n✨ +10 XP")
 
 @bot.message_handler(commands=["профиль"])
 def cmd_profile(message):
@@ -189,7 +189,7 @@ def cmd_profile(message):
     bar = progress_bar(user["xp"], user["level"] * 100)
     rank = ["🐣", "💪", "⚔️", "🛡️", "🏆", "👑", "🐉"][min(user["level"] // 3, 6)]
     
-    bot.reply_to(message, f"""
+    bot.send_message(message.chat.id, f"""
 📜 **ПРОФИЛЬ {user['username']}** {rank}
 
 🎚️ Уровень: **{user['level']}**
@@ -218,7 +218,7 @@ def cmd_dice(message):
         result = f"🎲 Выпало {roll}"
     
     add_xp(message.from_user.id, 10)
-    bot.reply_to(message, f"{result}\n🪙 Теперь: {user['brocoins']}")
+    bot.send_message(message.chat.id, f"{result}\n🪙 Теперь: {user['brocoins']}")
 
 @bot.message_handler(commands=["ежедневка"])
 def cmd_daily(message):
@@ -226,7 +226,7 @@ def cmd_daily(message):
     today = datetime.now().date()
     
     if user.get("last_daily") == today:
-        bot.reply_to(message, "⏳ Уже получал сегодня!")
+        bot.send_message(message.chat.id, "⏳ Уже получал сегодня!")
         return
     
     if user.get("last_daily") and (today - user["last_daily"]).days == 1:
@@ -240,7 +240,7 @@ def cmd_daily(message):
     user["brocoins"] += bonus
     user["last_daily"] = today
     
-    bot.reply_to(message, f"🎁 **+{bonus} брокоинов!**\n🔥 Стрик: {streak} дней")
+    bot.send_message(message.chat.id, f"🎁 **+{bonus} брокоинов!**\n🔥 Стрик: {streak} дней")
     add_xp(message.from_user.id, 20)
 
 @bot.message_handler(commands=["магазин"])
@@ -249,7 +249,7 @@ def cmd_shop(message):
     for item, data in shop_items.items():
         text += f"{item} — {data['price']} 🪙 | {data['effect']}\n"
     text += "\n/купить [название]"
-    bot.reply_to(message, text)
+    bot.send_message(message.chat.id, text)
 
 @bot.message_handler(commands=["купить"])
 def cmd_buy(message):
@@ -257,38 +257,38 @@ def cmd_buy(message):
     parts = message.text.split(maxsplit=1)
     
     if len(parts) < 2 or parts[1] not in shop_items:
-        bot.reply_to(message, "Что купить? /магазин")
+        bot.send_message(message.chat.id, "Что купить? /магазин")
         return
     
     item = parts[1]
     price = shop_items[item]["price"]
     
     if user["brocoins"] < price:
-        bot.reply_to(message, f"💰 Не хватает! Нужно {price} 🪙")
+        bot.send_message(message.chat.id, f"💰 Не хватает! Нужно {price} 🪙")
         return
     
     user["brocoins"] -= price
     user["inventory"].append(item)
-    bot.reply_to(message, f"✅ **Куплено {item}!**")
+    bot.send_message(message.chat.id, f"✅ **Куплено {item}!**")
 
 @bot.message_handler(commands=["дуэль"])
 def cmd_duel(message):
     if not message.reply_to_message:
-        bot.reply_to(message, "⚔️ Ответь на сообщение противника!")
+        bot.send_message(message.chat.id, "⚔️ Ответь на сообщение противника!")
         return
     
     p1 = message.from_user.first_name
     p2 = message.reply_to_message.from_user.first_name
     
     if p1 == p2:
-        bot.reply_to(message, "🤡 Нельзя с собой!")
+        bot.send_message(message.chat.id, "🤡 Нельзя с собой!")
         return
     
     power1 = random.randint(50, 150)
     power2 = random.randint(50, 150)
     winner = p1 if power1 > power2 else p2
     
-    bot.reply_to(message, f"""
+    bot.send_message(message.chat.id, f"""
 ⚔️ **ДУЭЛЬ:** {p1} vs {p2}
 
 {p1}: {'❤️' * (power1//15)} {power1} HP
@@ -309,12 +309,12 @@ def cmd_fortune(message):
     ]
     bonus = random.randint(10, 50)
     user["brocoins"] += bonus
-    bot.reply_to(message, f"🔮 {random.choice(fortunes)}\n\n✨ +{bonus} брокоинов!")
+    bot.send_message(message.chat.id, f"🔮 {random.choice(fortunes)}\n\n✨ +{bonus} брокоинов!")
 
 @bot.message_handler(commands=["рейтинг"])
 def cmd_rating(message):
     if not users:
-        bot.reply_to(message, "Пока никого нет! Напиши /start")
+        bot.send_message(message.chat.id, "Пока никого нет! Напиши /start")
         return
     
     top = sorted(users.items(), key=lambda x: x[1]["level"], reverse=True)[:5]
@@ -323,18 +323,18 @@ def cmd_rating(message):
     text = "🏆 **ТОП ИГРОКОВ**\n\n"
     for i, (_, data) in enumerate(top):
         text += f"{medals[i]} {data['username']} — {data['level']} ур. ({data['brocoins']} 🪙)\n"
-    bot.reply_to(message, text)
+    bot.send_message(message.chat.id, text)
 
 @bot.message_handler(commands=["монетка"])
 def cmd_coin(message):
     result = random.choice(["🦅 ОРЁЛ", "🪙 РЕШКА"])
-    bot.reply_to(message, f"🪙 Монетка падает...\n\n🎯 **{result}**")
+    bot.send_message(message.chat.id, f"🪙 Монетка падает...\n\n🎯 **{result}**")
 
 @bot.message_handler(commands=["кубик"])
 def cmd_dice6(message):
     roll = random.randint(1, 6)
     faces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]
-    bot.reply_to(message, f"🎲 Бросок...\n\n{faces[roll-1]} **{roll}**")
+    bot.send_message(message.chat.id, f"🎲 Бросок...\n\n{faces[roll-1]} **{roll}**")
 
 # ===== ОБЫЧНЫЕ СООБЩЕНИЯ =====
 @bot.message_handler(func=lambda m: True)

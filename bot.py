@@ -7,7 +7,6 @@ import urllib3
 from datetime import datetime
 from collections import defaultdict
 
-# ОТКЛЮЧАЕМ ПРЕДУПРЕЖДЕНИЯ О SSL (НЕ ВЛИЯЕТ НА БЕЗОПАСНОСТЬ)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     
 # ===== ВСТАВЬ СВОИ ДАННЫЕ =====
